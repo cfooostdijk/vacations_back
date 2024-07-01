@@ -37,19 +37,39 @@ gem 'bootsnap', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 # gem "rack-cors"
 
+# Kaminari is a scope and engine based, clean, powerful, and customizable paginator for modern web apps
 gem 'kaminari'
 
+# Faker is a library for generating fake data such as names, addresses, and phone numbers.
 gem 'faker'
 
+# Devise is a flexible authentication solution for Rails based on Warden.
 gem 'devise'
+
+# Devise JWT adds JWT token support to Devise for token-based authentication.
 gem 'devise-jwt'
+
+# JSONAPI::Serializer is a fast and simple serializer for producing JSON:API compliant output.
 gem 'jsonapi-serializer'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri windows]
 
+  # RuboCop is a Ruby static code analyzer and formatter, based on the community Ruby style guide.
   gem 'rubocop'
+
+  # RSpec-Rails is a testing framework for Rails applications,
+  # providing tools to write and run tests for models, controllers, views, and other components.
+  gem 'rspec-rails'
+
+  # Shoulda Matchers provides RSpec-compatible matchers for testing common Rails functionalities,
+  # including ActiveRecord associations and validations.
+  gem 'shoulda-matchers'
+
+  # factory_bot_rails provides integration between FactoryBot and Rails to simplify the creation
+  # of model instances for testing purposes.
+  gem 'factory_bot_rails'
 end
 
 group :development do

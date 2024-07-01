@@ -6,6 +6,17 @@ class Vacation < ApplicationRecord
 
   validates :vacation_start, :vacation_end, :motive, :status, :kind, presence: true
 
+  # enum status: {
+  #   pending: 'pendiente',
+  #   approved: 'aprobado',
+  #   rejected: 'rechazado'
+  # }
+
+  # enum kind: {
+  #   incapacidad: 'incapacidad',
+  #   vacaciones: 'vacaiones'
+  # }
+
   scope :by_status, ->(status) { where(status:) if status.present? }
   scope :by_kind, ->(kind) { where(kind:) if kind.present? }
   scope :by_vacation_start, ->(start_date) { where('vacation_start >= ?', start_date) if start_date.present? }
