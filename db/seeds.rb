@@ -1,12 +1,22 @@
-employees = Employee.create([
-  { first_name: 'Juan', last_name: 'Pérez', email: 'juan.perez@example.com', lider: "Alan" },
-  { first_name: 'Ana', last_name: 'García', email: 'ana.garcia@example.com', lider: "Alan" },
-  { first_name: 'Carlos', last_name: 'López', email: 'carlos.lopez@example.com', lider: "Carolina" }
-])
+require 'faker'
 
-Vacation.create([
-  { employee_id: employees[0].id, vacation_start: '2024-07-01', vacation_end: '2024-07-15', kind: 'annual', motive: 'vacation', status: 'approved' },
-  { employee_id: employees[1].id, vacation_start: '2024-08-01', vacation_end: '2024-08-10', kind: 'sick', motive: 'medical', status: 'pending' },
-  { employee_id: employees[2].id, vacation_start: '2024-09-01', vacation_end: '2024-09-15', kind: 'annual', motive: 'family trip', status: 'approved' },
-  { employee_id: employees[0].id, vacation_start: '2024-12-01', vacation_end: '2024-12-10', kind: 'sick', motive: 'medical', status: 'denied' }
-])
+employees = []
+30.times do
+  employees << Employee.create(
+    first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name,
+    email: Faker::Internet.email,
+    lider: Faker::Name.first_name
+  )
+end
+
+40.times do |i|
+  Vacation.create(
+    employee_id: employees[i % 30].id,
+    vacation_start: Faker::Date.between(from: '2024-01-01', to: '2024-12-31'),
+    vacation_end: Faker::Date.between(from: '2024-01-01', to: '2024-12-31'),
+    kind: ['annual', 'sick'].sample,
+    motive: Faker::Lorem.sentence(word_count: 2),
+    status: ['approved', 'pending', 'denied'].sample
+  )
+end
