@@ -4,8 +4,19 @@ module Api
       before_action :set_vacation, only: [:show, :update, :destroy]
 
       def index
-        @vacations = Vacation.all
-        render json: @vacations
+        @vacations = Vacation.all.page(params[:page]).per(8)
+
+        @vacations = @vacations.by_status(params[:status])
+                               .by_kind(params[:kind])
+                               .by_vacation_start(params[:vacation_start])
+                               .by_vacation_end(params[:vacation_end])
+
+        render json: {
+                      vacations: @vacations,
+                      total_pages: @vacations.total_pages,
+                      current_page: @vacations.current_page,
+                      total_count: @vacations.total_count
+                     }
       end
 
       def show

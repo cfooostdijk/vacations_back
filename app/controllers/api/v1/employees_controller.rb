@@ -4,8 +4,19 @@ module Api
       before_action :set_employee, only: [:show, :update, :destroy]
 
       def index
-        @employees = Employee.all
-        render json: @employees
+        @employees = Employee.all.page(params[:page]).per(8)
+
+        @employees = @employees.by_first_name(params[:first_name])
+                               .by_last_name(params[:last_name])
+                               .by_email(params[:email])
+                               .by_lider(params[:lider])
+
+        render json: {
+                      employees: @employees,
+                      total_pages: @employees.total_pages,
+                      current_page: @employees.current_page,
+                      total_count: @employees.total_count
+                    }
       end
 
       def show
