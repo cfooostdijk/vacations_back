@@ -5,20 +5,53 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+* Ruby version and Rails version:
+  ruby 3.3.0 / Rails 7.1.3.4
+
+* Download repository:
+  git clone git@github.com:cfooostdijk/vacations_back.git
 
 * System dependencies
+  bundle install
 
 * Configuration
+  * Get your secret_key_base:
+    rails secret
 
-* Database creation
+  * Set your secret_key_base at credentials:
+    EDITOR="nano" bin/rails credentials:edit
 
-* Database initialization
+  * Write and Save in "nano"
+    secret_key_base: <YOUR RAILS SECRET>
+
+* Database creation and initialization
+  rails db:create
 
 * How to run the test suite
+  rspec
 
-* Services (job queues, cache servers, search engines, etc.)
+* How to run rubocop
+  rubocop
 
-* Deployment instructions
+* Make it run
+  * Go to Gemfile and unlock gem:
+    gem "rack-cors"
 
-* ...
+  * Go to cors and overwrite it with this:
+    Rails.application.config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins 'http://localhost:3001'
+
+        resource "*",
+          headers: :any,
+          methods: [:get, :post, :put, :patch, :delete, :options, :head]
+      end
+    end
+
+  * Then go to your terminal and:
+  rails s
+
+* Its an API rails, so go get Postman and import collection in public/postman_collection:
+  HAVE FUN !!!!!
+
+* Or... much better go to:
