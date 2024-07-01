@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'faker'
 
 employees = []
@@ -15,8 +17,8 @@ end
     employee_id: employees[i % 30].id,
     vacation_start: Faker::Date.between(from: '2024-01-01', to: '2024-12-31'),
     vacation_end: Faker::Date.between(from: '2024-01-01', to: '2024-12-31'),
-    kind: ['annual', 'sick'].sample,
+    kind: %w[annual sick].sample,
     motive: Faker::Lorem.sentence(word_count: 2),
-    status: ['approved', 'pending', 'denied'].sample
+    status: %w[approved pending denied].sample
   )
 end

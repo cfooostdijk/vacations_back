@@ -1,22 +1,20 @@
+# frozen_string_literal: true
+
 module Api
   module V1
+    # Controller for managing employees.
     class EmployeesController < ApplicationController
-      before_action :set_employee, only: [:show, :update, :destroy]
+      before_action :set_employee, only: %i[show update destroy]
 
       def index
-        @employees = Employee.all.page(params[:page]).per(8)
-
-        @employees = @employees.by_first_name(params[:first_name])
-                               .by_last_name(params[:last_name])
-                               .by_email(params[:email])
-                               .by_lider(params[:lider])
+        @employees = filtered_employees.page(params[:page]).per(8)
 
         render json: {
-                      employees: @employees,
-                      total_pages: @employees.total_pages,
-                      current_page: @employees.current_page,
-                      total_count: @employees.total_count
-                    }
+          employees: @employees,
+          total_pages: @employees.total_pages,
+          current_page: @employees.current_page,
+          total_count: @employees.total_count
+        }
       end
 
       def show
@@ -45,6 +43,14 @@ module Api
       end
 
       private
+
+      def filtered_employees
+        employees = Employee.all
+        employees.by_first_name(params[:first_name])
+                 .by_last_name(params[:last_name])
+                 .by_email(params[:email])
+                 .by_lider(params[:lider])
+      end
 
       def set_employee
         @employee = Employee.find(params[:id])

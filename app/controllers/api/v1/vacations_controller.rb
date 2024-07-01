@@ -1,22 +1,20 @@
+# frozen_string_literal: true
+
 module Api
   module V1
+    # Controller for managing vacations.
     class VacationsController < ApplicationController
-      before_action :set_vacation, only: [:show, :update, :destroy]
+      before_action :set_vacation, only: %i[show update destroy]
 
       def index
-        @vacations = Vacation.all.page(params[:page]).per(8)
-
-        @vacations = @vacations.by_status(params[:status])
-                               .by_kind(params[:kind])
-                               .by_vacation_start(params[:vacation_start])
-                               .by_vacation_end(params[:vacation_end])
+        @vacations = filtered_vacations.page(params[:page]).per(8)
 
         render json: {
-                      vacations: @vacations,
-                      total_pages: @vacations.total_pages,
-                      current_page: @vacations.current_page,
-                      total_count: @vacations.total_count
-                     }
+          vacations: @vacations,
+          total_pages: @vacations.total_pages,
+          current_page: @vacations.current_page,
+          total_count: @vacations.total_count
+        }
       end
 
       def show
@@ -45,6 +43,14 @@ module Api
       end
 
       private
+
+      def filtered_vacations
+        vacations = Vacation.all
+        vacations.by_status(params[:status])
+                 .by_kind(params[:kind])
+                 .by_vacation_start(params[:vacation_start])
+                 .by_vacation_end(params[:vacation_end])
+      end
 
       def set_vacation
         @vacation = Vacation.find(params[:id])

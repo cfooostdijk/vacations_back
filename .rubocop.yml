@@ -1,0 +1,10 @@
+AllCops:
+  Exclude:
+    - 'config.ru'
+    - 'bin/**/*'
+    - 'db/migrate/*'
+    - 'db/schema.rb'
+    - 'config/**/*'
+    - 'app/mailers/*'
+    - 'app/jobs/*'
+    - 'app/channels/**/*'
