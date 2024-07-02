@@ -5,8 +5,14 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version and Rails version:
-  ruby 3.3.0 / Rails 7.1.3.4
+This is an example of how to list things you need to use the software and how to install them.
+* npm
+  ```sh
+  npm install npm@latest -g
+  ```
+
+You will need this Ruby version and Rails version:
+  * ruby 3.3.0 / Rails 7.1.3.4
 
 * Download repository:
   git clone git@github.com:cfooostdijk/vacations_back.git
