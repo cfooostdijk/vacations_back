@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  match '*all', controller: 'application', action: 'cors_preflight_check', via: [:options]
+
   devise_for :users, path: '', path_names: {
     sign_in: 'signin',
     sign_out: 'signout',
