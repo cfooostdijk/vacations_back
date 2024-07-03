@@ -7,7 +7,9 @@ module Api
       before_action :set_employee, only: %i[show update destroy]
 
       def index
-        @employees = filtered_employees.page(params[:page]).per(8)
+        @employees = filtered_employees
+        .order(file_number: :asc)
+        .page(params[:page]).per(8)
 
         render json: {
           employees: @employees,
@@ -46,7 +48,8 @@ module Api
 
       def filtered_employees
         employees = Employee.all
-        employees.by_first_name(params[:first_name])
+        employees.by_file_number(params[:file_number])
+                 .by_first_name(params[:first_name])
                  .by_last_name(params[:last_name])
                  .by_email(params[:email])
                  .by_lider(params[:lider])
@@ -57,7 +60,7 @@ module Api
       end
 
       def employee_params
-        params.require(:employee).permit(:first_name, :last_name, :email, :lider)
+        params.require(:employee).permit(:file_number, :first_name, :last_name, :email, :lider)
       end
     end
   end

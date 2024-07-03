@@ -7,10 +7,12 @@ module Api
       before_action :set_vacation, only: %i[show update destroy]
 
       def index
-        @vacations = filtered_vacations.page(params[:page]).per(8)
+        @vacations = filtered_vacations
+        .order(vacation_start: :asc)
+        .page(params[:page]).per(8)
 
         render json: {
-          vacations: @vacations,
+          vacations: ActiveModelSerializers::SerializableResource.new(@vacations, each_serializer: VacationSerializer),
           total_pages: @vacations.total_pages,
           current_page: @vacations.current_page,
           total_count: @vacations.total_count
@@ -46,10 +48,12 @@ module Api
 
       def filtered_vacations
         vacations = Vacation.all
-        vacations.by_status(params[:status])
-                 .by_kind(params[:kind])
+        vacations.by_file_number(params[:file_number])
                  .by_vacation_start(params[:vacation_start])
                  .by_vacation_end(params[:vacation_end])
+                 .by_motive(params[:motive])
+                 .by_status(params[:status])
+                 .by_kind(params[:kind])
       end
 
       def set_vacation
@@ -57,7 +61,7 @@ module Api
       end
 
       def vacation_params
-        params.require(:vacation).permit(:employee_id, :vacation_start, :vacation_end, :motive, :status, :kind)
+        params.require(:vacation).permit(:employee_id, :file_number, :vacation_start, :vacation_end, :motive, :status, :kind)
       end
     end
   end

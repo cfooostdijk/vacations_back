@@ -52,6 +52,10 @@ gem 'devise-jwt'
 # JSONAPI::Serializer is a fast and simple serializer for producing JSON:API compliant output.
 gem 'jsonapi-serializer'
 
+gem 'roo'
+
+gem 'active_model_serializers'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri windows]

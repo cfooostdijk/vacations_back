@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_01_152633) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_03_021511) do
   create_table "employees", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -18,6 +18,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_01_152633) do
     t.string "lider"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "file_number"
   end
 
   create_table "users", force: :cascade do |t|
@@ -43,6 +44,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_01_152633) do
     t.string "kind"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "file_number"
     t.index ["employee_id"], name: "index_vacations_on_employee_id"
   end
 
