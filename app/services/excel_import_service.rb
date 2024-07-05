@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'roo'
 
 class ExcelImportService
@@ -7,70 +9,80 @@ class ExcelImportService
   end
 
   def import_data
+    validate_excel_file!
+
     excel = Roo::Excelx.new(@file_path)
     has_valid_data = false
 
     excel.each_row_streaming(offset: 1) do |row|
-      file_number = row[0].value
-      name = row[1].value
-      email = row[2].value
-      lider = row[3].value
-      vacation_start = row[4].value
-      vacation_end = row[5].value
-      motive = row[6].value
-      status = row[7].value
-      kind = row[8].value
+      file_number = row[0]&.value
+      name = row[1]&.value
+      email = row[2]&.value
+      lider = row[3]&.value
+      vacation_start = row[4]&.value
+      vacation_end = row[5]&.value
+      kind = row[6]&.value
+      motive = row[7]&.value
+      status = row[8]&.value
 
-      # Verificar si la fila tiene datos válidos
-      if [file_number, name, email, lider, vacation_start, vacation_end, motive, status, kind].any?(&:present?)
-        has_valid_data = true
+      next unless [file_number, name, email, lider, vacation_start, vacation_end, motive, status, kind].any?(&:present?)
 
-        parts = name.split(' ', 2)
-        first_name = parts[0]
-        last_name = parts[1] || ''
+      has_valid_data = true
 
-        # Verificar si el empleado ya existe por correo electrónico
-        employee = Employee.find_by(email: email)
+      parts = name.to_s.split(' ', 2)
+      first_name = parts[0]
+      last_name = parts[1].to_s
 
-        unless employee
-          # Si el empleado no existe, intenta crear uno nuevo
-          employee = Employee.new(
-            file_number: file_number, # Usamos `employee_id` aquí
-            first_name: first_name,
-            last_name: last_name,
-            email: email,
-            lider: lider
-          )
+      begin
+        employee = Employee.find_or_initialize_by(email:)
+        employee.assign_attributes(
+          file_number:,
+          first_name:,
+          last_name:,
+          lider:
+        )
 
-          unless employee.save
-            @errors << "Error al crear empleado '#{name}': #{employee.errors.full_messages.join(', ')}"
-            Rails.logger.error "Error al crear empleado '#{name}': #{employee.errors.full_messages.join(', ')}"
-            return { success: false, errors: @errors }
-          end
+        unless employee.save
+          @errors << "Error al crear empleado '#{name}': #{employee.errors.full_messages.join(', ')}"
+          Rails.logger.error "Error al crear empleado '#{name}': #{employee.errors.full_messages.join(', ')}"
         end
 
         vacation = Vacation.new(
           employee_id: employee.id,
-          file_number: file_number,
-          vacation_start: vacation_start,
-          vacation_end: vacation_end,
-          motive: motive,
-          status: status,
-          kind: kind
+          file_number:,
+          vacation_start:,
+          vacation_end:,
+          kind:,
+          motive:,
+          status:
         )
 
         unless vacation.save
           @errors << "Error al crear vacación para empleado '#{name}': #{vacation.errors.full_messages.join(', ')}"
           Rails.logger.error "Error al crear vacación para empleado '#{name}': #{vacation.errors.full_messages.join(', ')}"
-          return { success: false, errors: @errors }
         end
+      rescue StandardError => e
+        @errors << "Error al procesar fila '#{row.inspect}': #{e.message}"
+        Rails.logger.error "Error al procesar fila '#{row.inspect}': #{e.message}"
       end
     end
 
-    unless has_valid_data
-      return { success: false, message: 'No se encontraron datos válidos para importar' }
+    if has_valid_data
+      { success: @errors.empty?,
+        message: @errors.empty? ? 'Datos importados exitosamente' : 'No se encontraron datos válidos para importar', errors: @errors }
+    else
+      { success: false, message: 'No se encontraron datos válidos para importar' }
     end
+  rescue StandardError => e
+    { success: false, errors: ["Error interno del servidor: #{e.message}"] }
+  end
 
-    { success: true, message: 'Datos importados exitosamente' }
+  private
+
+  def validate_excel_file!
+    extension = File.extname(@file_path).downcase
+    return if ['.xlsx', '.xls'].include?(extension)
+
+    raise StandardError, 'Invalid file format. Expected .xlsx or .xls'
   end
 end

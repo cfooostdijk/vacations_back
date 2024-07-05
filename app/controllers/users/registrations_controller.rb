@@ -8,6 +8,15 @@ module Users
     include RackSessionFix
     respond_to :json
 
+    def create
+      super do |resource|
+        if resource.errors.any?
+          render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity
+          return
+        end
+      end
+    end
+
     private
 
     def respond_with(resource, _opts = {})

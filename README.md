@@ -66,6 +66,14 @@ This one is an API Rails Backend.
    ```
    rails s
    ```
+### USE
+
+1. Go to your excel file and download it as xsls
+
+2. Go to "import file" at website and import
+
+3. Enjoy data on tabs
+
 
 
 * Its an API rails, so go get Postman and import collection in public/postman_collection --->  HAVE FUN !!!!!

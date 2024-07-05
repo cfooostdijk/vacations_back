@@ -3,13 +3,12 @@
 # spec/factories/vacations.rb
 FactoryBot.define do
   factory :vacation do
-    vacation_start { Faker::Date.between(from: 1.year.ago, to: Date.today) }
-    vacation_end { Faker::Date.between(from: 1.year.ago, to: Date.today) }
+    association :employee
+    file_number { Faker::Number.unique.number(digits: 5) }
+    vacation_start { Faker::Date.backward(days: 14) }
+    vacation_end { Faker::Date.forward(days: 14) }
     motive { Faker::Lorem.sentence }
-    # status { Vacation.statuses.keys.sample }
-    # kind { Vacation.kinds.keys.sample }
-    status { Faker::Lorem.sentence }
-    kind { Faker::Lorem.sentence }
-    association :employee, factory: :employee
+    status { Faker::Lorem.word }
+    kind { Faker::Lorem.word }
   end
 end

@@ -8,8 +8,8 @@ module Api
 
       def index
         @vacations = filtered_vacations
-        .order(vacation_start: :asc)
-        .page(params[:page]).per(8)
+                     .order(vacation_start: :asc)
+                     .page(params[:page]).per(8)
 
         render json: {
           vacations: ActiveModelSerializers::SerializableResource.new(@vacations, each_serializer: VacationSerializer),
@@ -24,11 +24,16 @@ module Api
       end
 
       def create
-        @vacation = Vacation.new(vacation_params)
-        if @vacation.save
-          render json: @vacation, status: :created
+        employee = Employee.find_by(file_number: params[:vacation][:file_number])
+        if employee
+          @vacation = Vacation.new(vacation_params.merge(employee_id: employee.id))
+          if @vacation.save
+            render json: @vacation, status: :created
+          else
+            render json: { error: @vacation.errors.full_messages }, status: :unprocessable_entity
+          end
         else
-          render json: @vacation.errors, status: :unprocessable_entity
+          render json: { error: 'Empleado no encontrado' }, status: :unprocessable_entity
         end
       end
 
@@ -36,7 +41,7 @@ module Api
         if @vacation.update(vacation_params)
           render json: @vacation
         else
-          render json: @vacation.errors, status: :unprocessable_entity
+          render json: { error: @vacation.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
@@ -61,7 +66,8 @@ module Api
       end
 
       def vacation_params
-        params.require(:vacation).permit(:employee_id, :file_number, :vacation_start, :vacation_end, :motive, :status, :kind)
+        params.require(:vacation).permit(:employee_id, :file_number, :vacation_start, :vacation_end, :motive, :status,
+                                         :kind)
       end
     end
   end

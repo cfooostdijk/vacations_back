@@ -14,7 +14,7 @@ RSpec.describe Api::V1::VacationsController, type: :controller do
       get :index, params: { page: 1 }
 
       expect(response).to be_successful
-      expect(json_response['vacations'].count).to eq(8) # Ajusta según la paginación
+      expect(json_response['vacations'].count).to eq(8)
       expect(json_response['total_pages']).to eq(2)
       expect(json_response['current_page']).to eq(1)
       expect(json_response['total_count']).to eq(10)
@@ -29,7 +29,7 @@ RSpec.describe Api::V1::VacationsController, type: :controller do
 
       get :index, params: { status: 'approved' }
 
-      expect(response).to have_http_status(:ok)
+      expect(response).to be_successful
       expect(json_response['vacations'].count).to eq(1)
       expect(json_response['vacations'][0]['status']).to eq('approved')
     end
@@ -56,13 +56,15 @@ RSpec.describe Api::V1::VacationsController, type: :controller do
         sign_in user
 
         employee = create(:employee)
-        vacation_params = attributes_for(:vacation, employee_id: employee.id)
+
+        vacation_params = attributes_for(:vacation, file_number: employee.file_number)
 
         expect do
           post :create, params: { vacation: vacation_params }
         end.to change(Vacation, :count).by(1)
 
         expect(response).to have_http_status(:created)
+        expect(json_response['employee_id']).to eq(employee.id)
       end
     end
 

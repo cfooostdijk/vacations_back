@@ -35,7 +35,7 @@ gem 'bootsnap', require: false
 # gem "image_processing", "~> 1.2"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
-gem "rack-cors"
+gem 'rack-cors'
 
 # Kaminari is a scope and engine based, clean, powerful, and customizable paginator for modern web apps
 gem 'kaminari'
@@ -52,9 +52,11 @@ gem 'devise-jwt'
 # JSONAPI::Serializer is a fast and simple serializer for producing JSON:API compliant output.
 gem 'jsonapi-serializer'
 
-gem 'roo'
-
+# ActiveModelSerializers is a framework for serializing complex Ruby on Rails objects in JSON and other formats.
 gem 'active_model_serializers'
+
+# Roo is a library for reading and manipulating spreadsheet files in various formats including Excel and CSV.
+gem 'roo'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

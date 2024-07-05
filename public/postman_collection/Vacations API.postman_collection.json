@@ -109,6 +109,47 @@
 			"response": []
 		},
 		{
+			"name": "Import file",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "excel_file",
+							"type": "file",
+							"src": "/home/cris/Downloads/Completo.xlsx"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/import_file",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"import_file"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get Employees",
 			"request": {
 				"auth": {
@@ -159,6 +200,16 @@
 						{
 							"key": "lider",
 							"value": "Jane Doe",
+							"disabled": true
+						},
+						{
+							"key": "employee_id",
+							"value": "5",
+							"disabled": true
+						},
+						{
+							"key": "file_number",
+							"value": "28",
 							"disabled": true
 						}
 					]
@@ -215,7 +266,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"first_name\": \"Jane\",\n    \"last_name\": \"Doe\",\n    \"email\": \"janedoe@gmail.com\",\n    \"lider\": \"John Doe\"\n}",
+					"raw": "{\n    \"file_number\": 98,\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"email\": \"johndoe@gmail.com\",\n    \"lider\": \"Jane Doe\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -255,7 +306,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"first_name\": \"Jane D\",\n    \"last_name\": \"Doe\",\n    \"email\": \"janedoe@gmail.com\",\n    \"lider\": \"John Doe\"\n}",
+					"raw": "{\n    \"file_number\": 98,\n    \"first_name\": \"John B\",\n    \"last_name\": \"Doe\",\n    \"email\": \"johndoe@gmail.com\",\n    \"lider\": \"Jane Doe\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -354,23 +405,33 @@
 							"disabled": true
 						},
 						{
+							"key": "file_number",
+							"value": "28",
+							"disabled": true
+						},
+						{
 							"key": "vacation_start",
-							"value": "2024-07-10",
+							"value": "2024-08-10",
 							"disabled": true
 						},
 						{
 							"key": "vacation_end",
-							"value": "2024-07-10",
-							"disabled": true
-						},
-						{
-							"key": "status",
-							"value": "approved",
+							"value": "2023-07-10",
 							"disabled": true
 						},
 						{
 							"key": "kind",
-							"value": "annual",
+							"value": "Vacaciones",
+							"disabled": true
+						},
+						{
+							"key": "motive",
+							"value": "Vacaciones en familia",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "Aprobado",
 							"disabled": true
 						}
 					]
@@ -394,7 +455,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/v1/vacations/3",
+					"raw": "http://localhost:3000/api/v1/vacations/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -404,7 +465,7 @@
 						"api",
 						"v1",
 						"vacations",
-						"3"
+						"1"
 					]
 				}
 			},
@@ -427,7 +488,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"employee_id\": 1,\n    \"vacation_start\": \"2024-07-10\",\n    \"vacation_end\": \"2024-01-03\",\n    \"motive\": \"Fugiat quod.\",\n    \"status\": \"pending\",\n    \"kind\": \"sick\"\n}",
+					"raw": "{\n    \"file_number\": 98,\n    \"vacation_start\": \"2024-07-10\",\n    \"vacation_end\": \"2024-01-03\",\n    \"kind\": \"Vacaciones\",\n    \"motive\": \"Vacaciones en familia\",\n    \"status\": \"Pendiente\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -467,7 +528,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"employee_id\": 1,\n    \"vacation_start\": \"2024-07-10\",\n    \"vacation_end\": \"2024-01-03\",\n    \"motive\": \"Fugiat quod.\",\n    \"status\": \"approved\",\n    \"kind\": \"sick\"\n}",
+					"raw": "{\n    \"employee_id\": 37,\n    \"file_number\": 98,\n    \"vacation_start\": \"2024-07-10\",\n    \"vacation_end\": \"2024-01-03\",\n    \"kind\": \"Vacaciones\",\n    \"motive\": \"Vacaciones en familia\",\n    \"status\": \"Aprobado\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

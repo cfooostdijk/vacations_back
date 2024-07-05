@@ -11,7 +11,7 @@ RSpec.describe Api::V1::EmployeesController, type: :controller do
       get :index, params: { page: 1 }
 
       expect(response).to be_successful
-      expect(json_response['employees'].count).to eq(8) # Ajusta según la paginación
+      expect(json_response['employees'].count).to eq(8)
       expect(json_response['total_pages']).to eq(2)
       expect(json_response['current_page']).to eq(1)
       expect(json_response['total_count']).to eq(10)
@@ -26,6 +26,39 @@ RSpec.describe Api::V1::EmployeesController, type: :controller do
       expect(response).to have_http_status(:ok)
       expect(json_response['employees'].count).to eq(1)
       expect(json_response['employees'][0]['first_name']).to eq('John')
+    end
+
+    it 'filters employees by file number' do
+      create(:employee, file_number: '12345')
+      create(:employee, file_number: '67890')
+
+      get :index, params: { file_number: '12345' }
+
+      expect(response).to have_http_status(:ok)
+      expect(json_response['employees'].count).to eq(1)
+      expect(json_response['employees'][0]['file_number'].to_s).to eq('12345')
+    end
+
+    it 'filters employees by email' do
+      create(:employee, email: 'john.doe@example.com')
+      create(:employee, email: 'jane.doe@example.com')
+
+      get :index, params: { email: 'john.doe@example.com' }
+
+      expect(response).to have_http_status(:ok)
+      expect(json_response['employees'].count).to eq(1)
+      expect(json_response['employees'][0]['email']).to eq('john.doe@example.com')
+    end
+
+    it 'filters employees by lider' do
+      create(:employee, lider: 'Alice')
+      create(:employee, lider: 'Bob')
+
+      get :index, params: { lider: 'Alice' }
+
+      expect(response).to have_http_status(:ok)
+      expect(json_response['employees'].count).to eq(1)
+      expect(json_response['employees'][0]['lider']).to eq('Alice')
     end
   end
 
@@ -59,9 +92,10 @@ RSpec.describe Api::V1::EmployeesController, type: :controller do
 
         expect do
           post :create, params: { employee: invalid_employee_params }
-        end.not_to change(Employee, :count)
+        end.to_not change(Employee, :count)
 
         expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_response['errors']).to include("First name can't be blank")
       end
     end
   end
@@ -83,6 +117,7 @@ RSpec.describe Api::V1::EmployeesController, type: :controller do
       put :update, params: { id: employee.id, employee: { first_name: nil } }
 
       expect(response).to have_http_status(:unprocessable_entity)
+      expect(json_response['errors']).to include("First name can't be blank")
     end
   end
 

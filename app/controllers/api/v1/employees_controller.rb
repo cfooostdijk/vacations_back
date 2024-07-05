@@ -8,8 +8,8 @@ module Api
 
       def index
         @employees = filtered_employees
-        .order(file_number: :asc)
-        .page(params[:page]).per(8)
+                     .order(file_number: :asc)
+                     .page(params[:page]).per(8)
 
         render json: {
           employees: @employees,
@@ -28,7 +28,7 @@ module Api
         if @employee.save
           render json: @employee, status: :created
         else
-          render json: @employee.errors, status: :unprocessable_entity
+          render json: { errors: @employee.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
@@ -36,7 +36,7 @@ module Api
         if @employee.update(employee_params)
           render json: @employee
         else
-          render json: @employee.errors, status: :unprocessable_entity
+          render json: { errors: @employee.errors.full_messages }, status: :unprocessable_entity
         end
       end
 

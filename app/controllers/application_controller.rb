@@ -8,6 +8,7 @@ class ApplicationController < ActionController::API
 
   def cors_preflight_check
     return unless request.method == 'OPTIONS'
+
     cors_set_access_control_headers
     render json: {}
   end

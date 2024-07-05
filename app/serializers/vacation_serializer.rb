@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # app/serializers/vacation_serializer.rb
 class VacationSerializer < ActiveModel::Serializer
   attributes :id, :file_number, :employee_id, :vacation_start, :vacation_end, :kind, :motive, :status
